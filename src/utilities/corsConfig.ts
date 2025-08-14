@@ -1,0 +1,14 @@
+// src/config/corsConfig.ts
+import { CorsOptions } from "cors";
+
+const allowedOrigins = [
+  "http://localhost:5173", // Dev frontend
+  "https://myapp.com", // Production frontend
+];
+
+export const corsOptions: CorsOptions = {
+  origin: allowedOrigins, // or ['http://localhost:5173']
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
