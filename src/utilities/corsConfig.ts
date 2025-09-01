@@ -1,7 +1,7 @@
 // src/config/corsConfig.ts
 import { CorsOptions } from "cors";
 
-const allowedOrigins = [
+export const allowedOrigins = [
   "http://localhost:5173", // Dev frontend
   "https://myapp.com", // Production frontend
 ];

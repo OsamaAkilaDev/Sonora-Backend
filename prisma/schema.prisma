@@ -29,6 +29,9 @@ model User {
   // Relationship relations
   sentFriendRequests     Relationship[] @relation("Requester")
   receivedFriendRequests Relationship[] @relation("Receiver")
+
+  participantingChats Participant[]
+  messages            Message[]
 }
 
 enum RelationshipStatus {
@@ -52,4 +55,44 @@ model Relationship {
   updatedAt   DateTime           @updatedAt
 
   @@unique([requesterId, receiverId])
+}
+
+model Chat {
+  id           String        @id @default(uuid())
+  isGroup      Boolean       @default(false)
+  name         String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  // 
+  messages     Message[]
+  participants Participant[]
+}
+
+model Participant {
+  id        String   @id @default(uuid())
+  role      String?
+  userId    String
+  chatId    String
+  // 
+  user      User     @relation(fields: [userId], references: [id])
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  // 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 
+  @@unique([userId, chatId])
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  content   String
+  senderId  String
+  chatId    String
+  // 
+  sender    User     @relation(fields: [senderId], references: [id])
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  // 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { prisma } from "..";
 import { AuthenticatedRequest } from "../types";
+import { getRelationships } from "../utilities/relationshipsUtils";
+import { emitRelationsTo } from "../sockets/relation";
 
 export async function getFriendRequests(
   req: AuthenticatedRequest,
@@ -14,36 +16,7 @@ export async function getFriendRequests(
       .send({ status: 401, content: "User not authenticated" });
 
   try {
-    const friendships = await prisma.relationship.findMany({
-      where: {
-        status: "PENDING",
-        OR: [{ requesterId: userId }, { receiverId: userId }],
-      },
-      select: {
-        id: true,
-        status: true,
-        createdAt: true,
-        updatedAt: true,
-        receiverId: true,
-        requesterId: true,
-        requester: {
-          select: {
-            id: true,
-            username: true,
-            displayName: true,
-            profilePicture: true, // pick only the fields you want
-          },
-        },
-        receiver: {
-          select: {
-            id: true,
-            username: true,
-            displayName: true,
-            profilePicture: true,
-          },
-        },
-      },
-    });
+    const friendships = await getRelationships(userId, "PENDING");
 
     const requested = friendships.filter((f) => f.requesterId === userId);
     const received = friendships.filter((f) => f.receiverId === userId);
@@ -85,9 +58,26 @@ export async function sendFriendRequest(
   });
 
   if (existingRelation)
-    return res
-      .status(409)
-      .send({ status: 409, content: "Request already sent" });
+    if (existingRelation.status === "REJECTED") {
+      await prisma.relationship.update({
+        where: {
+          requesterId_receiverId: {
+            requesterId,
+            receiverId,
+          },
+        },
+        data: {
+          status: "PENDING",
+        },
+      });
+      emitRelationsTo(receiverId);
+      emitRelationsTo(requesterId);
+      return res.status(200).send({ status: 200, content: "Request Sent" });
+    } else {
+      return res
+        .status(409)
+        .send({ status: 409, content: "Request already sent" });
+    }
 
   const opposingRelation = await prisma.relationship.findFirst({
     where: {
@@ -103,6 +93,10 @@ export async function sendFriendRequest(
       },
       data: { status: "ACCEPTED" },
     });
+
+    emitRelationsTo(receiverId);
+    emitRelationsTo(requesterId);
+
     return res
       .status(200)
       .send({ status: 200, content: "Friend request accepted" });
@@ -116,6 +110,9 @@ export async function sendFriendRequest(
         status: "PENDING",
       },
     });
+
+    emitRelationsTo(receiverId);
+    emitRelationsTo(requesterId);
 
     return res.status(200).send({ status: 200, content: "Request Sent" });
   } catch (err) {
@@ -158,6 +155,9 @@ export async function acceptFriendRequest(
       where: { id: relationId },
       data: { status: "ACCEPTED" },
     });
+
+    emitRelationsTo(relation.receiverId);
+    emitRelationsTo(relation.requesterId);
 
     return res
       .status(200)
@@ -207,6 +207,9 @@ export async function rejectFriendRequest(
       data: { status: "REJECTED" },
     });
 
+    emitRelationsTo(relation.receiverId);
+    emitRelationsTo(relation.requesterId);
+
     return res
       .status(200)
       .send({ status: 200, content: "Friend request rejected" });
@@ -254,6 +257,9 @@ export async function cancelFriendRequest(
     await prisma.relationship.delete({
       where: { id: relationId },
     });
+
+    emitRelationsTo(relation.receiverId);
+    emitRelationsTo(relation.requesterId);
 
     return res
       .status(200)
