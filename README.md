@@ -41,7 +41,7 @@ Core backend systems that are already implemented and functional:
 ## 🚀 Currently in Development
 
 - 🗨️ **Chatting System**  
-  One-to-one messaging with real-time updates  
+  1-to-1 and group chats with real-time updates  
 
 ---
 
