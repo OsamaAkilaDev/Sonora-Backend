@@ -1,36 +1,66 @@
-# Sonora Backend
+# 🎧 Sonora Backend
 
 Backend service for the **Sonora** real-time chatting application.  
-Built with **TypeScript**, **Node.js**, **Express.js**, and **Prisma ORM**, it powers the user system, friendship management, and authentication, with WebSocket support for seamless instant communication.
+Built with **TypeScript**, **Node.js**, **Express.js**, and **Prisma ORM**, it powers the user system, friendship management, authentication, and real-time communication via WebSockets.
 
 ---
 
 ## 🚀 Tech Stack
 
-- **TypeScript**
-- **Node.js**
-- **Express.js**
-- **Prisma ORM**
-- **JWT** for authentication
-- **WebSockets** (in progress)
+- **TypeScript**  
+- **Node.js**  
+- **Express.js**  
+- **Prisma ORM**  
+- **JWT** for authentication  
+- **WebSockets** for real-time updates  
+- **PostgreSQL / MySQL** (or your choice of relational DB)
 
 ---
 
-## ✅ Current Features
+## ✅ Done
 
-- **User System** — User registration, profile handling, and management.
-- **Friendship System** — Send, accept, and manage friend requests.
-- **JWT-based Authentication** — Secure login and request validation.
+Core backend systems that are already implemented and functional:
+
+- 🔐 **Authentication System**  
+  JWT-based login, signup, password hashing, and session validation  
+
+- 👤 **User System**  
+  Registration, profile management, and data storage  
+
+- 🧑‍🤝‍🧑 **Friendship System**  
+  Sending, accepting, and managing friend requests  
+
+- 🔌 **WebSocket Integration**  
+  Real-time event handling for presence, chat updates, and notifications  
+
+- ⚙️ **Database Setup with Prisma**  
+  Schema design, migrations, and query optimization  
 
 ---
 
-## 🔨 In Progress
+## 🚀 Currently in Development
 
-- **WebSocket Support** — Real-time event handling for instant updates.
+- 🗨️ **Chatting System**  
+  1-to-1 and group chats with real-time updates  
 
 ---
 
-## 📅 Future Plans
+## 🧭 Future Plans
 
-- **Chatting System** — One-to-one and group messaging with media sharing.
-- **Calling System** — Voice and video calls.
+- 📞 **Calling System**  
+  One-on-one voice and video calls with signaling through WebSockets  
+
+- 👥 **Group Chat & Calls**  
+  Multi-user messaging and voice/video rooms  
+
+- 🛠️ **Admin & Moderation Tools**  
+  Manage users, monitor activity, and enforce rules  
+
+- ⚙️ **Settings & Preferences**  
+  User-configurable notifications, privacy, and account options  
+
+---
+
+## 💡 Vision
+
+The Sonora backend is designed to be **robust, scalable, and real-time-ready**, providing the foundation for the frontend’s seamless chat, social, and calling experience. Together with the frontend, it creates a complete, full-stack communication platform.
