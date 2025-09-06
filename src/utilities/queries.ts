@@ -35,3 +35,26 @@ export async function getRelationships(id: string, status: RelationshipStatus) {
 
   return friendships;
 }
+
+export async function getChatListFor(uid: string) {
+  const chats = await prisma.chat.findMany({
+    where: { participants: { some: { userId: uid } } },
+    include: {
+      participants: {
+        where: { userId: { not: uid } },
+        include: {
+          user: {
+            select: {
+              id: true,
+              displayName: true,
+              username: true,
+              profilePicture: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return chats;
+}

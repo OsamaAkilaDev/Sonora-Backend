@@ -7,6 +7,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { relationRoutes } from "./routes/relations";
 import { Server } from "socket.io";
+import { chatRoutes } from "./routes/chats";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 // Assigning Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/relation", relationRoutes);
+app.use("/api/chat", chatRoutes);
 
 // Start express server
 const serverApp = app.listen(PORT, () =>

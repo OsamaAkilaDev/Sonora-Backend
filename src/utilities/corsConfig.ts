@@ -2,7 +2,9 @@
 import { CorsOptions } from "cors";
 
 export const allowedOrigins = [
-  "http://localhost:5173", // Dev frontend
+  "http://localhost:5173", // Dev frontend,
+  "http://localhost:4173", // Dev frontend,
+  "http://192.168.0.197:5173",
   "https://myapp.com", // Production frontend
 ];
 

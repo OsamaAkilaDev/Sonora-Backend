@@ -1,5 +1,5 @@
 import { io } from "..";
-import { getRelationships } from "../utilities/relationshipsUtils";
+import { getRelationships } from "../utilities/queries";
 
 export async function emitRelationsTo(id: string) {
   const friendships = await getRelationships(id, "ACCEPTED");

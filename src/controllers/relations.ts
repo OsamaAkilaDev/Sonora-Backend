@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { prisma } from "..";
 import { AuthenticatedRequest } from "../types";
-import { getRelationships } from "../utilities/relationshipsUtils";
+import { getRelationships } from "../utilities/queries";
 import { emitRelationsTo } from "../sockets/relation";
 
 export async function getFriendRequests(
