@@ -13,6 +13,7 @@ const app = express();
 
 // CORS config
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 // Assigning Middlewares
 app.use(cookieParser());
