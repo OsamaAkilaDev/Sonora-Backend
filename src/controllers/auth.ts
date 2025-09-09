@@ -2,7 +2,7 @@ import { compare, hash } from "bcrypt";
 import { Request, Response } from "express";
 import { prisma } from "..";
 import * as jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../secrets";
+import { JWT_SECRET, NODE_ENV } from "../secrets";
 import { AuthenticatedRequest } from "../types";
 
 export async function login(req: Request, res: Response) {
@@ -34,7 +34,13 @@ export async function login(req: Request, res: Response) {
     JWT_SECRET
   );
 
-  //   return res.json({ token });
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: NODE_ENV === "production",
+    sameSite: NODE_ENV === "production" ? "none" : "lax",
+    path: "/",
+  });
+
   return res.status(200).send({
     status: 200,
     content: {
