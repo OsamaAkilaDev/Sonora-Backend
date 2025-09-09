@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { authRoutes } from "./routes/auth";
 import { PrismaClient } from "./generated/prisma";
 import { PORT } from "./secrets";
@@ -22,6 +22,10 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/relation", relationRoutes);
 app.use("/api/chat", chatRoutes);
+
+app.get("/api/ping", (req: Request, res: Response) => {
+  return res.status(200).send({ message: "Ping!" });
+});
 
 // Start express server
 const serverApp = app.listen(PORT, () =>
