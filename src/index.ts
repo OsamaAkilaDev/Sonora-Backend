@@ -12,7 +12,7 @@ import { chatRoutes } from "./routes/chats";
 const app = express();
 
 // CORS config
-app.use("*", cors(corsOptions));
+app.use(cors(corsOptions));
 
 // Assigning Middlewares
 app.use(cookieParser());
