@@ -99,7 +99,7 @@ export async function sendFriendRequest(
 
     return res
       .status(200)
-      .send({ status: 200, content: "Friend request accepted" });
+      .send({ status: 200, content: "You are already friends" });
   }
 
   try {

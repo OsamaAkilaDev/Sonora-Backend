@@ -9,11 +9,13 @@ export async function authenticateToken(
   res: Response,
   next: () => any
 ) {
+  // Debug log: print all incoming cookies
   //   const authHeader = req.headers["authorization"];
   const token: string = req.cookies.token;
 
-  if (!token)
+  if (!token) {
     return res.status(401).send({ status: 401, content: "Token not found." });
+  }
 
   try {
     const decoded = await jwt.verify(token, JWT_SECRET);

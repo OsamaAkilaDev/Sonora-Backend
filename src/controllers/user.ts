@@ -7,7 +7,7 @@ export async function getUser(
   res: Response,
   next: any
 ) {
-  const username = req.body.username;
+  const username = req.body.username.toLowerCase();
 
   if (!username)
     return res.status(404).send({ status: 404, content: "Invalid username" });

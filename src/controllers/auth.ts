@@ -68,6 +68,11 @@ export async function signup(req: Request, res: Response) {
         username: req.body.username.toLowerCase(),
         email: req.body.email.toLowerCase(),
         password: await hash(req.body.password, 10),
+        profilePicture: `https://api.dicebear.com/9.x/initials/png?seed=${
+          req.body.displayName
+        }&backgroundColor=${
+          colors[Math.floor(Math.random() * colors.length - 1)]
+        }`,
       },
     });
 
@@ -93,8 +98,17 @@ export async function signup(req: Request, res: Response) {
 }
 
 export function logout(req: AuthenticatedRequest, res: Response) {
-  // Block token
-  res.send("Logout works");
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: NODE_ENV === "production",
+    sameSite: NODE_ENV === "production" ? "none" : "lax",
+    path: "/", // must match the original path
+  });
+
+  return res.status(200).send({
+    status: 200,
+    content: "Logged out successfully",
+  });
 }
 
 export function auth(req: AuthenticatedRequest, res: Response) {
@@ -107,8 +121,34 @@ export function auth(req: AuthenticatedRequest, res: Response) {
         id: req.user?.id,
         displayName: req.user?.displayName,
         username: req.user?.username,
+        about: req.user?.about,
         profilePicture: req.user?.profilePicture,
+        bannerPicture: req.user?.bannerPicture,
+        createdAt: req.user?.createdAt,
       },
     },
   });
 }
+
+const colors = [
+  "FF6B6B", // Coral Red
+  "4ECDC4", // Aqua Mint
+  "FFD93D", // Bright Yellow
+  "6A4C93", // Deep Purple
+  "FF8C42", // Tangerine
+  "00A8C6", // Teal Blue
+  "D7263D", // Crimson Red
+  "F0A6CA", // Soft Pink
+  "1B263B", // Dark Indigo
+  "FF5733", // Vivid Orange
+  "1FAB89", // Turquoise Green
+  "FFE156", // Lemon Yellow
+  "FF3F34", // Fire Red
+  "A8DADC", // Light Cyan
+  "E07A5F", // Terra Cotta
+  "F94144", // Bold Red
+  "7209B7", // Electric Purple
+  "4361EE", // Bright Blue
+  "4CC9F0", // Sky Blue
+  "F8961E", // Vibrant Orange
+];
