@@ -36,8 +36,10 @@ export async function login(req: Request, res: Response) {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: NODE_ENV === "production",
-    sameSite: NODE_ENV === "production" ? "none" : "lax",
+    // secure: NODE_ENV === "production",
+    secure: false,
+    // sameSite: NODE_ENV === "production" ? "none" : "lax",
+    sameSite: "lax",
     path: "/",
   });
 
