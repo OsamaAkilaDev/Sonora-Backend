@@ -1,4 +1,4 @@
-import { compare, hash } from "bcrypt";
+import { compare, hash } from "bcryptjs";
 import { Request, Response } from "express";
 import { prisma } from "..";
 import * as jwt from "jsonwebtoken";
