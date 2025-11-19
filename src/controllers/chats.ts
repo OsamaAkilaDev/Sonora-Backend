@@ -38,6 +38,7 @@ export async function createChat(req: AuthenticatedRequest, res: Response) {
   });
 
   emitChatListTo(uid);
+  emitChatListTo(uid2);
 
   return res.status(200).send({ status: 200, content: newChat });
 }
