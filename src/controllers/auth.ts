@@ -39,7 +39,7 @@ export async function login(req: Request, res: Response) {
     // secure: NODE_ENV === "production",
     secure: false,
     // sameSite: NODE_ENV === "production" ? "none" : "lax",
-    sameSite: "lax",
+    sameSite: "none",
     path: "/",
   });
 
