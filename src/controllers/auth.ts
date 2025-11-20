@@ -39,6 +39,7 @@ export async function login(req: Request, res: Response) {
     secure: NODE_ENV === "production",
     sameSite: NODE_ENV === "production" ? "none" : "lax",
     path: "/",
+    maxAge: 1000 * 60 * 60 * 24 * 365 * 100 * 100,
   });
 
   return res.status(200).send({
