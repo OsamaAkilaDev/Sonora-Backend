@@ -9,13 +9,6 @@ export async function emitChatListTo(id: string) {
   });
 }
 
-export async function emitChatMessageTo(
-  id: string,
-  chatId: string,
-  message: object
-) {
-  io.to(id).emit("new-message", {
-    chatId: chatId,
-    message: message,
-  });
+export async function emitChatMessageTo(id: string, message: any, tempId: any) {
+  io.to(id).emit("new-message", { ...message, tempId });
 }

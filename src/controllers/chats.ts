@@ -97,6 +97,7 @@ export async function getChatData(req: AuthenticatedRequest, res: Response) {
 export async function sendMessage(req: AuthenticatedRequest, res: Response) {
   const uid: any = req.user?.id;
   const chatId: any = req.body.chatId;
+  const tempId: any = req.body.tempId;
   const message: any = req.body.messageContent;
 
   try {
@@ -127,8 +128,40 @@ export async function sendMessage(req: AuthenticatedRequest, res: Response) {
         content: "No chat with this ID exist",
       });
 
+    const chatMessages = await prisma.chat.findUnique({
+      where: { id: chatId },
+      include: {
+        participants: {
+          where: { userId: { not: uid } },
+          include: {
+            user: {
+              select: {
+                id: true,
+                displayName: true,
+                username: true,
+                profilePicture: true,
+              },
+            },
+          },
+        },
+        messages: {
+          orderBy: { createdAt: "asc" },
+          include: {
+            sender: {
+              select: {
+                id: true,
+                username: true,
+                displayName: true,
+                profilePicture: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
     chatData?.participants.forEach((participant) => {
-      emitChatMessageTo(participant.userId, chatId, newMessage);
+      emitChatMessageTo(participant.userId, newMessage, tempId);
     });
 
     return res
