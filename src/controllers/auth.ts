@@ -98,6 +98,7 @@ export async function signup(req: Request, res: Response) {
 }
 
 export function logout(req: AuthenticatedRequest, res: Response) {
+  console.log(req.cookies.token);
   res.clearCookie("token", {
     httpOnly: true,
     secure: NODE_ENV === "production",
